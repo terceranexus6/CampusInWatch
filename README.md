@@ -1,9 +1,9 @@
 # CampusInWatch15
 
-Miembros del <equipo 5>:
+Miembros del "equipo 5":
 
 - Paula
-- Adrían
+- Adrián
 - Enrique
 - Raúl
 - Carlos J
