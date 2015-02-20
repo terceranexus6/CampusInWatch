@@ -2,7 +2,7 @@
 
 ¿Qué es _CampusInWatch_?
 
-CampusInWatch2015 es el primer HACKATHON realizado de forma global y simultánea por programadores de las Universidades de Berckeley, Monterrey, Córdoba y Granada, con el objetivo de desarrollar aplicaciones en varios ámbitos.
+CampusInWatch2015 es el primer HACKATHON realizado de forma global y simultánea por programadores de las Universidades de Berkeley, Monterrey, Córdoba y Granada, con el objetivo de desarrollar aplicaciones en varios ámbitos.
 
 En el caso de Granada, los equipos estarán formados por 5 personas como máximo bajo la supervisión de un mentor del sector.
 
