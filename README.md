@@ -2,8 +2,8 @@
 
 Miembros del "equipo 5":
 
-- Paula
-- Adrián
-- Enrique
-- Raúl
-- Carlos J
+- Paula <pauladelahoz@correo.ugr.es>
+- Adrián <adring@correo.ugr.es>
+- Enrique <enriquex@correo.ugr.es>
+- Raúl <rauro@correo.ugr.es>
+- Carlos J <cjpm@correo.ugr.es>
