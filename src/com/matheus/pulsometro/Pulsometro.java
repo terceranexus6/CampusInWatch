@@ -2,8 +2,10 @@ package com.matheus.pulsometro;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import android.media.AudioManager;
 import com.matheus.pulsometro.MyVars.TYPE;
 import android.os.Vibrator;
+import android.media.ToneGenerator;
 //import com.matheus.pulsometro.Browser;
 
 import android.annotation.SuppressLint;
@@ -144,6 +146,8 @@ public class Pulsometro extends Activity {
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - MyVars.startTime) / 1000d;
             if (totalTimeInSecs >= 10) {
+		ToneGenerator ToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+		toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
 		Vibrator vibs = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		vibs.vibrate(600);
                 double bps = (MyVars.beats / totalTimeInSecs);
