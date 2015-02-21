@@ -3,8 +3,8 @@ package com.matheus.pulsometro;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.matheus.pulsometro.MyVars.TYPE;
-
-import com.matheus.pulsometro.Browser;
+import android.os.Vibrator;
+//import com.matheus.pulsometro.Browser;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -88,7 +88,7 @@ public class Pulsometro extends Activity {
         MyVars.camera = null;
     }
 
-    private static PreviewCallback previewCallback = new PreviewCallback() {
+    private PreviewCallback previewCallback = new PreviewCallback() {
 
         /**
          * {@inheritDoc}
@@ -144,6 +144,8 @@ public class Pulsometro extends Activity {
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - MyVars.startTime) / 1000d;
             if (totalTimeInSecs >= 10) {
+		Vibrator vibs = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		vibs.vibrate(600);
                 double bps = (MyVars.beats / totalTimeInSecs);
                 int dpm = (int) (bps * 60d);
                 if (dpm < 30 || dpm > 180) {
@@ -152,8 +154,8 @@ public class Pulsometro extends Activity {
                 	MyVars.beats = 0;
                 	MyVars.processing.set(false);
 
-                    Browser browser = new Browser();
-                    browser.callBrowser(beats);
+                   // Browser browser = new Browser();
+                   // browser.callBrowser(beats);
                 	
                     return;
                 }
@@ -188,7 +190,7 @@ public class Pulsometro extends Activity {
 
    
     
-    private static SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
         /**
          * {@inheritDoc}
