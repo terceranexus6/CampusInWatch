@@ -15,7 +15,7 @@
             android:text="@string/default_text"
             android:textSize="32sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">        
+            android:layout_height="wrap_content">
         </TextView>
         <RelativeLayout
 	        android:orientation="horizontal" 
@@ -26,14 +26,47 @@
 	            android:layout_width="wrap_content"
 		        android:layout_height="wrap_content">
 		    </com.matheus.pulsometro.PulsometroView>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ff010101"
+                android:weightSum="1">
+
+                <requestFocus
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <requestFocus
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:id="@+id/loadingPanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal">
+
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:indeterminate="true"
+                        android:id="@+id/progressBar"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
 	    </RelativeLayout>
     </LinearLayout>
 
 	<SurfaceView
 	    android:id="@+id/preview"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dp"
-	    android:layout_weight="0.26" >
+	    android:layout_width="186dp"
+	    android:layout_height="2dp">
 
 	</SurfaceView>
 

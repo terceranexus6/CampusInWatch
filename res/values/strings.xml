@@ -2,4 +2,5 @@
 <resources>
     <string name="default_text">--</string>
     <string name="app_name">Pulsometro</string>
+    <string name="emergencias">tel:112</string>	
 </resources>
