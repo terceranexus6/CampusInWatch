@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 @SuppressWarnings("unused")
 public class MyVars {
-	static final String APP = "Pulsometro";
+	static final String APP = "InHearth";
 	static final AtomicBoolean processing = new AtomicBoolean(false);
 
     static SurfaceView viewFinder = null;

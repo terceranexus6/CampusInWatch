@@ -2,8 +2,11 @@ package com.matheus.pulsometro;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+//Tono y vibracion
 import android.media.AudioManager;
 import com.matheus.pulsometro.MyVars.TYPE;
+
+import android.media.Image;
 import android.os.Vibrator;
 import android.media.ToneGenerator;
 //import com.matheus.pulsometro.Browser;
@@ -23,6 +26,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 @SuppressLint("NewApi")
@@ -30,28 +35,62 @@ import android.widget.TextView;
 
 public class Pulsometro extends Activity {
 
-    
+    private Button imageButton;
+
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings("deprecation")
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+
+    //Funcion de java que se llama justo cuando se inicia la aplicacion
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        MyVars.viewFinder = (SurfaceView) findViewById(R.id.preview);
-        MyVars.viewFinderHolder = MyVars.viewFinder.getHolder();
-        MyVars.viewFinderHolder.addCallback(surfaceCallback);
-        MyVars.viewFinderHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-        MyVars.image = findViewById(R.id.image);
-        MyVars.text = (TextView) findViewById(R.id.text);
+          setContentView(R.layout.main );
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        MyVars.wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
+
+            final ImageButton boton = (ImageButton) findViewById(R.id.imageButton2);
+
+            boton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boton.setVisibility(View.GONE);
+                    MyVars.viewFinder.setVisibility(View.VISIBLE);
+
+
+                }
+            });
+
+            //Aqui creamos y mantenemos la preview con surferview
+                MyVars.viewFinder = (SurfaceView) findViewById(R.id.preview);
+                MyVars.viewFinderHolder = MyVars.viewFinder.getHolder();
+                 MyVars.viewFinderHolder.addCallback(surfaceCallback);
+
+                //Esta funcion en necesaria ya que surface te obliga a crear los buffers
+                MyVars.viewFinderHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+                //Muestra la imagen de la camara y el numero de pulsaciones
+                MyVars.image = findViewById(R.id.image);
+                MyVars.text = (TextView) findViewById(R.id.text);//Confirmado que muestra el numero de pulsaciones
+
+                //Manejo de la bataria del reloj para un minimo consumo
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                MyVars.wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
+
+
+
+              /*
+              * Debe de existir un protocolo de comprobacion para que si nada mas llamar al onCreate no se detecta nada
+              * con la camara se lance una excepcions y se cierre la camara.
+              * Para evitar esto se podria llamar a preview(la camara) junto con el menu y hacerle invisible
+              * Es una idea. No tengo sueño pero si no duerme creo que mañana seguire escribindome a mi mismo
+              *
+              * */
+
     }
+
 
     /**
      * {@inheritDoc}
@@ -65,30 +104,42 @@ public class Pulsometro extends Activity {
      * {@inheritDoc}
      */
     @Override
+
+    //Funcion de Android que recupera la aplicacion en caso de interrupcion
     public void onResume() {
         super.onResume();
+        //if(MyVars.camera != null) {
 
-        MyVars.wakeLock.acquire();
-
-        MyVars.camera = Camera.open();
-
-        MyVars.startTime = System.currentTimeMillis();
+            MyVars.wakeLock.acquire();
+            MyVars.camera = Camera.open();
+            MyVars.startTime = System.currentTimeMillis();
+       // }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+
+    //Funcion de la aplicacion  para parar la aplicacion
     public void onPause() {
         super.onPause();
 
-        MyVars.wakeLock.release();
+       //if(MyVars.camera != null){
 
-        MyVars.camera.setPreviewCallback(null);
-        MyVars.camera.stopPreview();
-        MyVars.camera.release();
-        MyVars.camera = null;
+           MyVars.wakeLock.release();
+
+           MyVars.camera.setPreviewCallback(null);
+           MyVars.camera.stopPreview();
+           MyVars.camera.release();
+           MyVars.camera = null;
+
+
+       //}
+
     }
+
+    
 
     private PreviewCallback previewCallback = new PreviewCallback() {
 
@@ -109,12 +160,13 @@ public class Pulsometro extends Activity {
             int imgAvg = Fotopletismografia.redAVG(data.clone(), height, width);
             // Log.i(TAG, "imgAvg="+imgAvg);
             if (imgAvg == 0 || imgAvg == 255) {
-            	MyVars.processing.set(false);
+                MyVars.processing.set(false);
                 return;
             }
 
             int arrayAVGsum = 0;
             int arrayAVGcount = 0;
+            //Aqui se hace una media de pulsaciones y se guarda en la clase MyVars
             for (int i = 0; i < MyVars.arrayAVG.length; i++) {
                 if (MyVars.arrayAVG[i] >= 1) {
                     arrayAVGcount++;
@@ -127,7 +179,7 @@ public class Pulsometro extends Activity {
             if (imgAvg < changeAVG) {
                 newType = TYPE.beatON;
                 if (newType != MyVars.statusBatimento) {
-                	MyVars.beats++;
+                    MyVars.beats++;
                 }
             } else if (imgAvg > changeAVG) {
                 newType = TYPE.beatOFF;
@@ -139,28 +191,28 @@ public class Pulsometro extends Activity {
 
             // Transitioned from one state to another to the same
             if (newType != MyVars.statusBatimento) {
-            	MyVars.statusBatimento = newType;
-            	MyVars.image.postInvalidate();
+                MyVars.statusBatimento = newType;
+                MyVars.image.postInvalidate();
             }
 
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - MyVars.startTime) / 1000d;
             if (totalTimeInSecs >= 10) {
-		ToneGenerator ToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
-		toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
-		Vibrator vibs = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		vibs.vibrate(600);
+                ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+                toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
+                Vibrator vibs = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibs.vibrate(600);
                 double bps = (MyVars.beats / totalTimeInSecs);
                 int dpm = (int) (bps * 60d);
                 if (dpm < 30 || dpm > 180) {
-                	MyVars.startTime = System.currentTimeMillis();
-                	int beats = (int)MyVars.beats;
-                	MyVars.beats = 0;
-                	MyVars.processing.set(false);
+                    MyVars.startTime = System.currentTimeMillis();
+                    int beats = (int)MyVars.beats;
+                    MyVars.beats = 0;
+                    MyVars.processing.set(false);
 
-                   // Browser browser = new Browser();
-                   // browser.callBrowser(beats);
-                	
+                    // Browser browser = new Browser();
+                    // browser.callBrowser(beats);
+
                     return;
                 }
 
@@ -183,8 +235,8 @@ public class Pulsometro extends Activity {
                 MyVars.text.setText(String.valueOf(beatsAvg));
                 MyVars.startTime = System.currentTimeMillis();
                 MyVars.beats = 0;
-                
-                
+
+
             }
 
 
@@ -192,8 +244,8 @@ public class Pulsometro extends Activity {
         }
     };
 
-   
-    
+   //De aqui pa abajo parecen xcepciones del programa
+
     private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
         /**
@@ -202,8 +254,8 @@ public class Pulsometro extends Activity {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             try {
-            	MyVars.camera.setPreviewDisplay(MyVars.viewFinderHolder);
-            	MyVars.camera.setPreviewCallback(previewCallback);
+                MyVars.camera.setPreviewDisplay(MyVars.viewFinderHolder);
+                MyVars.camera.setPreviewCallback(previewCallback);
             } catch (Throwable t) {
                 Log.e("PreviewDemo-surfaceCallback", "Exception in setPreviewDisplay()", t);
             }
@@ -235,7 +287,7 @@ public class Pulsometro extends Activity {
     };
 
     @SuppressLint("NewApi")
-	private static Camera.Size getSmallestPreviewSize(int width, int height, Camera.Parameters parameters) {
+    private static Camera.Size getSmallestPreviewSize(int width, int height, Camera.Parameters parameters) {
         Camera.Size result = null;
 
         for (Camera.Size size : parameters.getSupportedPreviewSizes()) {

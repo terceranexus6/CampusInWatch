@@ -21,6 +21,7 @@ public class PulsometroView extends View {
     private static int parentWidth = 0;
     private static int parentHeight = 0;
 
+    //Estas dos funciones intercalan entre el muñeco que habia antes verde y el rojo
     public PulsometroView(Context c, AttributeSet attr) {
         super(c, attr);
 
@@ -35,7 +36,7 @@ public class PulsometroView extends View {
         redBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.red_icon);
     }
     
-
+   //Pinta lo que viene a ser el icono que cambia y parpadea y las pulsaciones (creo)
     protected void onDraw(Canvas canvas) {
         if (canvas == null){
         	throw new NullPointerException();
