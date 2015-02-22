@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_text">--</string>
-    <string name="app_name">Pulsometro</string>
-    <string name="emergencias">tel:112</string>	
+    <string name="app_name">InHearth</string>
+    <string name="emergencias">tel:112</string>
 </resources>
